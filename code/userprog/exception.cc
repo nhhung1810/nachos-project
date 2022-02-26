@@ -52,6 +52,7 @@
 char *User2System(int virtAddr, int limit);
 int System2User(int virtAddr, int len, char *buffer);
 int MAX_LENGTH_FILENAME = 32;
+void pcIncrement();
 
 void ExceptionHandler(ExceptionType which)
 {
@@ -85,59 +86,25 @@ void ExceptionHandler(ExceptionType which)
 			kernel->machine->WriteRegister(2, (int)result);
 
 			/* Modify return point */
-			{
-				/* set previous programm counter (debugging only)*/
-				kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
-
-				/* set programm counter to next instruction (all Instructions are 4 byte wide)*/
-				kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
-
-				/* set next programm counter for brach execution */
-				kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg) + 4);
-			}
+			pcIncrement();
 
 			return;
 
 			ASSERTNOTREACHED();
 
 			break;
-		case SC_Create:
-			// int virtAddress;
-			// char *filename;
-			// DEBUG('a', "\nSC_Create call...");
-			// DEBUG('a', "\nReading virtual address of filename");
-			// // Reading arguments from r4
-			// virtAddress = kernel->machine->ReadRegister(4);
-			// DEBUG('a', "\nReading filename");
-			// // Max length is 32
-			// filename = User2System(virtAddress, MAX_LENGTH_FILENAME + 1);
-			// if (filename == NULL)
-			// {
-			// 	printf("\n Not enough memory in system");
-			// 	DEBUG('a', "\n Not enough memory in system");
-			// 	kernel->machine->WriteRegister(2, -1);
-			// 	// Give back error
-			// 	delete filename;
-			// 	return;
-			// }
-			// DEBUG('a', "\n Finish reading filename.");
-			// // Create file with size = 0
-			// // Dùng đối tượng fileSystem của lớp OpenFile để tạo file,
-			// // việc tạo file này là sử dụng các thủ tục tạo file của hệ điều
-			// // hành Linux, chúng ta không quản ly trực tiếp các block trên
-			// // đĩa cứng cấp phát cho file, việc quản ly các block của fileS
-			// // trên ổ đĩa là một đồ án khác
-			// if (!kernel->fileSystem->Create(filename, 0))
-			// {
-			// 	printf("\n Error create file '%s'", filename);
-			// 	kernel->machine->WriteRegister(2, -1);
-			// 	delete filename;
-			// 	return;
-			// }
-			// kernel->machine->WriteRegister(2, 0); // successfully return to user
-			// delete filename;
-			// return;
-			// ASSERTNOTREACHED();
+		case SC_PrintNum:
+			// DEBUG(dbgSys, "Reach here"<< "\n");
+			int num;
+			num = (int)kernel->machine->ReadRegister(4);
+			// DEBUG(dbgSys, "Print num " << num << "\n");
+			SysPrintNum(num);
+			pcIncrement();
+
+			return;
+
+			ASSERTNOTREACHED()
+
 			break;
 
 		default:
@@ -150,6 +117,19 @@ void ExceptionHandler(ExceptionType which)
 		break;
 	}
 	ASSERTNOTREACHED();
+}
+
+void pcIncrement()
+{
+	kernel->machine->WriteRegister(PrevPCReg,
+								   kernel->machine->ReadRegister(PCReg));
+
+	kernel->machine->WriteRegister(PCReg,
+								   kernel->machine->ReadRegister(NextPCReg));
+
+	kernel->machine->WriteRegister(
+		NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
+	return;
 }
 
 char *User2System(int virtAddr, int limit)
