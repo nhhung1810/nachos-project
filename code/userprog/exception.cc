@@ -102,42 +102,42 @@ void ExceptionHandler(ExceptionType which)
 
 			break;
 		case SC_Create:
-			int virtAddress;
-			char *filename;
-			DEBUG('a', "\nSC_Create call...");
-			DEBUG('a', "\nReading virtual address of filename");
-			// Reading arguments from r4
-			virtAddress = kernel->machine->ReadRegister(4);
-			DEBUG('a', "\nReading filename");
-			// Max length is 32
-			filename = User2System(virtAddress, MAX_LENGTH_FILENAME + 1);
-			if (filename == NULL)
-			{
-				printf("\n Not enough memory in system");
-				DEBUG('a', "\n Not enough memory in system");
-				kernel->machine->WriteRegister(2, -1);
-				// Give back error
-				delete filename;
-				return;
-			}
-			DEBUG('a', "\n Finish reading filename.");
-			// Create file with size = 0
-			// Dùng đối tượng fileSystem của lớp OpenFile để tạo file,
-			// việc tạo file này là sử dụng các thủ tục tạo file của hệ điều
-			// hành Linux, chúng ta không quản ly trực tiếp các block trên
-			// đĩa cứng cấp phát cho file, việc quản ly các block của fileS
-			// trên ổ đĩa là một đồ án khác
-			if (!kernel->fileSystem->Create(filename, 0))
-			{
-				printf("\n Error create file '%s'", filename);
-				kernel->machine->WriteRegister(2, -1);
-				delete filename;
-				return;
-			}
-			kernel->machine->WriteRegister(2, 0); // successfully return to user
-			delete filename;
-			return;
-			ASSERTNOTREACHED();
+			// int virtAddress;
+			// char *filename;
+			// DEBUG('a', "\nSC_Create call...");
+			// DEBUG('a', "\nReading virtual address of filename");
+			// // Reading arguments from r4
+			// virtAddress = kernel->machine->ReadRegister(4);
+			// DEBUG('a', "\nReading filename");
+			// // Max length is 32
+			// filename = User2System(virtAddress, MAX_LENGTH_FILENAME + 1);
+			// if (filename == NULL)
+			// {
+			// 	printf("\n Not enough memory in system");
+			// 	DEBUG('a', "\n Not enough memory in system");
+			// 	kernel->machine->WriteRegister(2, -1);
+			// 	// Give back error
+			// 	delete filename;
+			// 	return;
+			// }
+			// DEBUG('a', "\n Finish reading filename.");
+			// // Create file with size = 0
+			// // Dùng đối tượng fileSystem của lớp OpenFile để tạo file,
+			// // việc tạo file này là sử dụng các thủ tục tạo file của hệ điều
+			// // hành Linux, chúng ta không quản ly trực tiếp các block trên
+			// // đĩa cứng cấp phát cho file, việc quản ly các block của fileS
+			// // trên ổ đĩa là một đồ án khác
+			// if (!kernel->fileSystem->Create(filename, 0))
+			// {
+			// 	printf("\n Error create file '%s'", filename);
+			// 	kernel->machine->WriteRegister(2, -1);
+			// 	delete filename;
+			// 	return;
+			// }
+			// kernel->machine->WriteRegister(2, 0); // successfully return to user
+			// delete filename;
+			// return;
+			// ASSERTNOTREACHED();
 			break;
 
 		default:
