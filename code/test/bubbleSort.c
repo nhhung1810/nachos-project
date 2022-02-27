@@ -33,24 +33,14 @@ int main()
     Halt();
   }
 
-  for (i=0; i<n; ++i) {
-    for (j=0; j<n-1; ++j) {
-      if (opt == 1) { //ascending
-        if (arr[j] > arr[j+1]) {
-          tmp = arr[j];
-          arr[j] = arr[j+1];
-          arr[j+1] = tmp;
-        }
-      } else {
-        if (arr[j] < arr[j+1]) { //descending
-          tmp = arr[j];
-          arr[j] = arr[j+1];
-          arr[j+1] = tmp;
-        }
-      }
+  BubbleSort(&arr, n);
+  if (opt == 2) {
+    for(i=0; n-i-1>i; ++i) {
+      tmp = arr[i];
+      arr[i] = arr[n-i-1];
+      arr[n-i-1] = tmp;
     }
   }
-
   PrintString("Sorted Array: \n");
   for (i=0; i<n; ++i) {
     PrintString("a[");

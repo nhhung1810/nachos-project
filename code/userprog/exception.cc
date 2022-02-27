@@ -89,6 +89,12 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 			break;
 
+		case SC_BubbleSort:
+			bubbleSortHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
+
 		default:
 			cerr << "Unexpected system call " << type << "\n";
 			break;

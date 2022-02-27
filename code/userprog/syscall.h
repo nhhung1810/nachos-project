@@ -44,7 +44,7 @@
 #define SC_ReadString 48
 #define SC_ReadChar 49
 
-#define SC_BubbleSort 1234
+#define SC_BubbleSort 48
 #define SC_Ascii 6969
 #ifndef IN_ASM
 
@@ -202,6 +202,10 @@ void PrintChar(char c);
  */
 void PrintString(char *str);
 
+/*
+ * Sort array in ascending order
+ */
+void BubbleSort(int *arr, int n);
 /*
  * Read a string from stdin 
  */

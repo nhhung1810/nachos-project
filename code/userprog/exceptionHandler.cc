@@ -177,6 +177,36 @@ void randomNumHandle()
     return;
 }
 
+void bubbleSortHandle() 
+{
+    // DEBUG('z', "CUONG");
+    int addr = kernel->machine->ReadRegister(4);
+    int n = kernel->machine->ReadRegister(5);
+    int i, *arr, j, tmp;
+    arr = (int*)malloc(sizeof(int) * n);
+    DEBUG(dbgSys, "Address " << addr);
+    for (i=0; i<n; ++i) {
+        kernel->machine->ReadMem(addr+sizeof(int)*i, sizeof(int), &arr[i]);
+    }
+
+    for (i=0; i<n; ++i) {
+        for (j=0; j<n-1; ++j) {
+            if (arr[j] > arr[j+1]) {
+                tmp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = tmp;
+            }
+        }
+    }
+
+    for (i=0; i<n; ++i) {
+        kernel->machine->WriteMem(addr+sizeof(int)*i, sizeof(int), arr[i]);
+    }
+
+    pcIncrement();
+    return;
+}
+
 void pcIncrement()
 {
     kernel->machine->WriteRegister(PrevPCReg,
