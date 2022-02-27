@@ -105,6 +105,32 @@ void printCharHandle()
     pcIncrement();
     return;
 }
+
+void readNumHandle() 
+{
+    int n;
+    n = SysReadNum();
+    kernel->machine->WriteRegister(2, n);
+    DEBUG(dbgSys, "Readed number: " << n);
+    pcIncrement();
+    return;
+}
+
+/**
+ * @brief 
+ * Use standard lib to random positive integer number from 0..MAX_RAND (2^31-1)
+ * 
+ */
+void randomNumHandle()
+{
+    srand(time(NULL));
+    int randomedNumber = rand();
+    kernel->machine->WriteRegister(2, randomedNumber);
+    DEBUG(dbgSys, "Randomed number: " << randomedNumber);
+    pcIncrement();
+    return;
+}
+
 void pcIncrement()
 {
     kernel->machine->WriteRegister(PrevPCReg,

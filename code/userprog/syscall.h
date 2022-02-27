@@ -39,6 +39,7 @@
 #define SC_PrintNum 43
 #define SC_ReadNum 44
 #define SC_PrintChar 45
+#define SC_RandomNum 46
 
 #define SC_Ascii 6969
 #ifndef IN_ASM
