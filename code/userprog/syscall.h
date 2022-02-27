@@ -39,6 +39,7 @@
 #define SC_PrintNum 43
 #define SC_ReadNum 44
 #define SC_PrintChar 45
+#define SC_PrintString 47
 #define SC_RandomNum 46
 
 #define SC_Ascii 6969
@@ -189,6 +190,7 @@ void PrintNum(int num);
 int ReadNum();
 
 void PrintChar(char c);
+void PrintString(char *str);
 
 #endif /* IN_ASM */
 

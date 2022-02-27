@@ -1,28 +1,6 @@
 // exceptionHandler.cc
 // Refactor all handler
 
-//	Entry point into the Nachos kernel from user programs.
-//	There are two kinds of things that can cause control to
-//	transfer back to here from user code:
-//
-//	syscall -- The user code explicitly requests to call a procedure
-//	in the Nachos kernel.  Right now, the only function we support is
-//	"Halt".
-//
-//	exceptions -- The user code does something that the CPU can't handle.
-//	For instance, accessing memory that doesn't exist, arithmetic errors,
-//	etc.
-//
-//	Interrupts (which can also cause control to transfer from user
-//	code into the Nachos kernel) are handled elsewhere.
-//
-// For now, this only handles the Halt() system call.
-// Everything else core dumps.
-//
-// Copyright (c) 1992-1996 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation
-// of liability and disclaimer of warranty provisions.
-
 #include "copyright.h"
 #include "main.h"
 #include "kernel.h"
@@ -54,12 +32,16 @@
 int MAX_LENGTH_FILENAME = 32;
 
 // HEADER SECTION
-void pcIncrement();
+// 1. Handler
 void haltHandle();
 void addHandle();
 void printNumHandle();
 void printCharHandle();
+void printStringHandle();
 
+// 2. Helper function
+void pcIncrement();
+char *getStringFromAddress(int addr);
 // IMPLEMENTATION SECTION
 
 void haltHandle()
@@ -106,6 +88,17 @@ void printCharHandle()
     return;
 }
 
+
+void printStringHandle()
+{
+    // Find the head of string
+    int addr = kernel->machine->ReadRegister(4);
+    char *str = getStringFromAddress(addr);
+    SysPrintString(str, strlen(str));
+    delete str;
+    pcIncrement();
+}
+
 void readNumHandle() 
 {
     int n;
@@ -116,6 +109,27 @@ void readNumHandle()
     return;
 }
 
+// Allocating mem -> need to delete
+char *getStringFromAddress(int addr)
+{
+    int size = 0;
+    int c = -1;
+    while (c != '\0')
+    {
+        kernel->machine->ReadMem(addr + size, 1, &c);
+        size++;
+        if (c == '\0')
+            break;
+    }
+
+    char *str = new char[size];
+    for (int i = 0; i < size; i++)
+    {
+        int chr;
+        kernel->machine->ReadMem(addr + i, 1, &chr);
+        str[i] = chr;
+    }
+    return str;
 /**
  * @brief 
  * Use standard lib to random positive integer number from 0..MAX_RAND (2^31-1)
