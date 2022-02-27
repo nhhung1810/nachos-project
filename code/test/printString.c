@@ -2,8 +2,8 @@
 
 int main()
 {
-    PrintString('abcdefg', 7);
-
+    char *str = "abcdefg\n";
+    PrintString(str);
     Halt();
     /* not reached */
 }

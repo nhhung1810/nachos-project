@@ -32,12 +32,16 @@
 int MAX_LENGTH_FILENAME = 32;
 
 // HEADER SECTION
-void pcIncrement();
+// 1. Handler
 void haltHandle();
 void addHandle();
 void printNumHandle();
 void printCharHandle();
 void printStringHandle();
+
+// 2. Helper function
+void pcIncrement();
+char *getStringFromAddress(int addr);
 // IMPLEMENTATION SECTION
 
 void haltHandle()
@@ -86,8 +90,36 @@ void printCharHandle()
 
 void printStringHandle()
 {
+    // Find the head of string
+    int addr = kernel->machine->ReadRegister(4);
+    char *str = getStringFromAddress(addr);
+    SysPrintString(str, strlen(str));
+    delete str;
     pcIncrement();
     return;
+}
+
+// Allocating mem -> need to delete
+char *getStringFromAddress(int addr)
+{
+    int size = 0;
+    int c = -1;
+    while (c != '\0')
+    {
+        kernel->machine->ReadMem(addr + size, 1, &c);
+        size++;
+        if (c == '\0')
+            break;
+    }
+
+    char *str = new char[size];
+    for (int i = 0; i < size; i++)
+    {
+        int chr;
+        kernel->machine->ReadMem(addr + i, 1, &chr);
+        str[i] = chr;
+    }
+    return str;
 }
 
 void pcIncrement()

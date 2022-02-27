@@ -189,7 +189,7 @@ void PrintNum(int num);
 int ReadNum();
 
 void PrintChar(char c);
-void PrintString(char c);
+void PrintString(char *str);
 
 #endif /* IN_ASM */
 

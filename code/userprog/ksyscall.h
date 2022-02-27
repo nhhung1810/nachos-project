@@ -67,6 +67,15 @@ void SysPrintChar(char c)
   return;
 }
 
+void SysPrintString(char *str, int length)
+{
+  for (int i = 0; i < length; i++)
+  {
+    kernel->synchConsoleOut->PutChar(str[i]);
+  }
+  return;
+}
+
 int getNumBufferLength(int num)
 {
   int size = 1;
