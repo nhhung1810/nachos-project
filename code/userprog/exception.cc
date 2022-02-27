@@ -77,6 +77,11 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 			break;
 		case SC_ReadNum:
+			int n;
+			n = SysReadNum();
+			kernel->machine->WriteRegister(2, n);
+			pcIncrement();
+			DEBUG(dbgSys, "Readed number: " << n);
 			pcIncrement();
 			return;
 			ASSERTNOTREACHED();

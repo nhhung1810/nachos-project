@@ -40,6 +40,7 @@
 #define SC_ReadNum 44
 #define SC_PrintChar 45
 
+#define SC_Ascii 6969
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos
@@ -180,6 +181,11 @@ void ThreadExit(int ExitCode);
  * Print out the number
  */
 void PrintNum(int num);
+
+/*
+ * Read an integer number in [-2^31, 2^31)
+ */
+int ReadNum();
 
 void PrintChar(char c);
 
