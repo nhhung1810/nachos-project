@@ -1,4 +1,6 @@
-// exception.cc
+// exceptionHandler.cc
+// Refactor all handler
+
 //	Entry point into the Nachos kernel from user programs.
 //	There are two kinds of things that can cause control to
 //	transfer back to here from user code:
@@ -26,7 +28,6 @@
 #include "kernel.h"
 #include "syscall.h"
 #include "ksyscall.h"
-#include "exceptionHandler.cc"
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -50,52 +51,69 @@
 //	is in machine.h.
 //----------------------------------------------------------------------
 
-void ExceptionHandler(ExceptionType which)
+int MAX_LENGTH_FILENAME = 32;
+
+// HEADER SECTION
+void pcIncrement();
+void haltHandle();
+void addHandle();
+void printNumHandle();
+void printCharHandle();
+
+// IMPLEMENTATION SECTION
+
+void haltHandle()
 {
-	int type = kernel->machine->ReadRegister(2);
+    DEBUG(dbgSys, "Shutdown, initiated by user program.\n");
 
-	DEBUG(dbgSys, "Received Exception " << which << " type: " << type << "\n");
+    SysHalt();
 
-	switch (which)
-	{
-	case SyscallException:
-		switch (type)
-		{
-		case SC_Halt:
-			haltHandle();
-			return;
-			ASSERTNOTREACHED();
-			break;
-		case SC_Add:
-			addHandle();
-			return;
-			ASSERTNOTREACHED();
-			break;
-		case SC_PrintNum:
-			printNumHandle();
-			return;
-			ASSERTNOTREACHED();
-			break;
-		case SC_ReadNum:
-			pcIncrement();
-			return;
-			ASSERTNOTREACHED();
-			break;
+    return;
+}
 
-		case SC_PrintChar:
-			printCharHandle();
-			return;
-			ASSERTNOTREACHED();
-			break;
+void addHandle()
+{
+    DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
 
-		default:
-			cerr << "Unexpected system call " << type << "\n";
-			break;
-		}
-		break;
-	default:
-		cerr << "Unexpected user mode exception" << (int)which << "\n";
-		break;
-	}
-	ASSERTNOTREACHED();
+    /* Process SysAdd Systemcall*/
+    int result;
+    result = SysAdd(/* int op1 */ (int)kernel->machine->ReadRegister(4),
+                    /* int op2 */ (int)kernel->machine->ReadRegister(5));
+
+    DEBUG(dbgSys, "Add returning with " << result << "\n");
+    /* Prepare Result */
+    kernel->machine->WriteRegister(2, (int)result);
+
+    /* Modify return point */
+    pcIncrement();
+
+    return;
+}
+
+void printNumHandle()
+{
+    int num = (int)kernel->machine->ReadRegister(4);
+    SysPrintNum(num);
+    pcIncrement();
+    return;
+}
+
+void printCharHandle()
+{
+    char c = (char)kernel->machine->ReadRegister(4);
+    SysPrintChar(c);
+    pcIncrement();
+    return;
+}
+void pcIncrement()
+{
+    kernel->machine->WriteRegister(PrevPCReg,
+                                   kernel->machine->ReadRegister(PCReg));
+
+    kernel->machine->WriteRegister(PCReg,
+                                   kernel->machine->ReadRegister(NextPCReg));
+
+    kernel->machine->WriteRegister(
+        NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
+    return;
 }

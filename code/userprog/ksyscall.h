@@ -56,7 +56,14 @@ void SysPrintNum(int num)
   }
   return;
 }
-// 100 / 100
+
+void SysPrintChar(char c)
+{
+  c = (int)c % 128; // ensure ascii
+  kernel->synchConsoleOut->PutChar(c);
+  return;
+}
+
 int getNumBufferLength(int num)
 {
   int size = 1;
