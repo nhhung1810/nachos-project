@@ -88,7 +88,6 @@ void printCharHandle()
     return;
 }
 
-
 void printStringHandle()
 {
     // Find the head of string
@@ -99,7 +98,7 @@ void printStringHandle()
     pcIncrement();
 }
 
-void readNumHandle() 
+void readNumHandle()
 {
     int n;
     n = SysReadNum();
@@ -130,10 +129,11 @@ char *getStringFromAddress(int addr)
         str[i] = chr;
     }
     return str;
+}
 /**
  * @brief 
- * Use standard lib to random positive integer number from 0..MAX_RAND (2^31-1)
  * 
+ *   Use standard lib to random positive integer number from 0..MAX_RAND(2 ^ 31 - 1) *
  */
 void randomNumHandle()
 {
