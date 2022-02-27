@@ -44,7 +44,7 @@ void SysPrintNum(int num)
   while (num)
   {
     // need to load buffer as to not reverse the number
-    int bufferLength = getNumBufferLength(num) + 1;
+    int bufferLength = getNumBufferLength(num);
     int *buffer = new int(bufferLength);
     for (int i = 0; i < bufferLength; i++)
     {
@@ -76,10 +76,13 @@ int getNumBufferLength(int num)
     size *= 10;
     length++;
   }
+  // DEBUG(dbgSys, "DEBUG->getNumBufferLength->"
+  //                   << "num=" << num << " length=" << length << "\n");
   return length;
 }
 
-int SysReadNum() {
+int SysReadNum()
+{
   DEBUG(dbgSys, "Reading number");
   char c = kernel->synchConsoleIn->GetChar();
 
@@ -87,54 +90,79 @@ int SysReadNum() {
   unsigned int res = 0;
   int len = 0;
 
-  if (c == '-') {
+  if (c == '-')
+  {
     isNegative = 1;
-  } else if (c == EOF || c == ' ' || c == '\n' || c == '\t' || c < '0' || c > '9') {
+  }
+  else if (c == EOF || c == ' ' || c == '\n' || c == '\t' || c < '0' || c > '9')
+  {
     DEBUG(dbgSys, "Invalid (start with EOF or blank)");
     return 0;
-  } else {
+  }
+  else
+  {
     res = (c - '0');
     len = 1;
   }
 
-  while (true) {
+  while (true)
+  {
     c = kernel->synchConsoleIn->GetChar();
-    if (c == EOF || c == ' ' || c == '\n' || c == '\t') break;
-    if (c < '0' && c > '9') {
+    if (c == EOF || c == ' ' || c == '\n' || c == '\t')
+      break;
+    if (c < '0' && c > '9')
+    {
       DEBUG(dbgSys, "Invalid (digits only)");
     }
 
     int digit = c - '0';
-    
+
     len += 1;
-    if (len > 10) {
+    if (len > 10)
+    {
       DEBUG(dbgSys, "Invalid (exceed 32-bit integer)");
     }
 
-    if (len == 10) {
-      if (isNegative) {
-        if (res < (unsigned int)abs(MIN_INT) / 10) {
+    if (len == 10)
+    {
+      if (isNegative)
+      {
+        if (res < (unsigned int)abs(MIN_INT) / 10)
+        {
           res = res * 10 + digit;
-        } else if (res == (unsigned int)abs(MIN_INT) / 10 && digit <= 8) {
-          res = res * 10 + digit;
-        } else {
-          DEBUG(dbgSys, "Exceed 32-bit integer");
-          return 0;
         }
-      } else {
-        if (res < (unsigned int)MAX_INT / 10) {
+        else if (res == (unsigned int)abs(MIN_INT) / 10 && digit <= 8)
+        {
           res = res * 10 + digit;
-        } else if (res == (unsigned int)MAX_INT / 10 && digit <= 7) {
-          res = res * 10 + digit;
-        } else {
+        }
+        else
+        {
           DEBUG(dbgSys, "Exceed 32-bit integer");
           return 0;
         }
       }
-    } else {
+      else
+      {
+        if (res < (unsigned int)MAX_INT / 10)
+        {
+          res = res * 10 + digit;
+        }
+        else if (res == (unsigned int)MAX_INT / 10 && digit <= 7)
+        {
+          res = res * 10 + digit;
+        }
+        else
+        {
+          DEBUG(dbgSys, "Exceed 32-bit integer");
+          return 0;
+        }
+      }
+    }
+    else
+    {
       res = res * 10 + digit;
     }
-  } 
+  }
 
   DEBUG(dbgSys, "End reading number")
   return isNegative ? -(int)res : (int)res;
