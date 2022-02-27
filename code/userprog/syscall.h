@@ -42,7 +42,7 @@
 #define SC_PrintString 47
 #define SC_RandomNum 46
 
-#define SC_BubbleSort 1234
+#define SC_BubbleSort 48
 #define SC_Ascii 6969
 #ifndef IN_ASM
 
@@ -192,6 +192,8 @@ int ReadNum();
 
 void PrintChar(char c);
 void PrintString(char *str);
+
+void BubbleSort(int *arr, int n);
 
 #endif /* IN_ASM */
 
