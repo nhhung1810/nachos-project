@@ -41,6 +41,8 @@
 #define SC_PrintChar 45
 #define SC_PrintString 47
 #define SC_RandomNum 46
+#define SC_ReadString 48
+#define SC_ReadChar 49
 
 #define SC_Ascii 6969
 #ifndef IN_ASM
@@ -189,8 +191,22 @@ void PrintNum(int num);
  */
 int ReadNum();
 
+/*
+ * Print out an ascii character
+ */
 void PrintChar(char c);
+
+/*
+ * Print out an string
+ */
 void PrintString(char *str);
+
+/*
+ * Read a string from stdin 
+ */
+void ReadString(char str[], int length);
+
+char ReadChar();
 
 #endif /* IN_ASM */
 

@@ -38,12 +38,14 @@ void addHandle();
 void printNumHandle();
 void printCharHandle();
 void printStringHandle();
+void readStringHandle();
+void readCharHandle();
 
 // 2. Helper function
 void pcIncrement();
 char *getStringFromAddress(int addr);
-// IMPLEMENTATION SECTION
 
+// IMPLEMENTATION SECTION
 void haltHandle()
 {
     DEBUG(dbgSys, "Shutdown, initiated by user program.\n");
@@ -103,7 +105,37 @@ void readNumHandle()
     int n;
     n = SysReadNum();
     kernel->machine->WriteRegister(2, n);
-    DEBUG(dbgSys, "Readed number: " << n);
+    DEBUG(dbgSys, "Read number: " << n);
+    pcIncrement();
+    return;
+}
+
+void systemString2UserString(char *str, int addr, int customSize = -1)
+{
+    int size = customSize == -1 ? strlen(str) : customSize;
+    for (int i = 0; i < size; i++)
+    {
+        kernel->machine->WriteMem(addr + i, 1, str[i]);
+    }
+    kernel->machine->WriteMem(addr + size, 1, '\0');
+    return;
+}
+
+void readCharHandle()
+{
+    char *tmp = SysReadString(1);
+    kernel->machine->WriteRegister(2, tmp[0]);
+    pcIncrement();
+    return;
+}
+
+void readStringHandle()
+{
+    // buffer = strSize + 1 as '\0'
+    int strPtr = kernel->machine->ReadRegister(4);
+    int size = (int)kernel->machine->ReadRegister(5);
+    char *str = SysReadString(size);
+    systemString2UserString(str, strPtr);
     pcIncrement();
     return;
 }

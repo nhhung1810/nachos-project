@@ -173,8 +173,34 @@ int SysReadNum()
     }
   }
 
-  DEBUG(dbgSys, "End reading number")
+  DEBUG(dbgSys, "End reading number");
   return isNegative ? -(int)res : (int)res;
+}
+
+// buffer size include
+char *SysReadString(int bufferSize)
+{
+  int index = 0;
+  char *str = new char(bufferSize);
+  do
+  {
+    if (!bufferSize)
+      break;
+
+    char c = kernel->synchConsoleIn->GetChar();
+    // Only accept readable string
+    if (c == EOF || c == '\n' || c == '\t' || c == ' ')
+      break;
+    if (c < 32 || c > 126)
+    {
+      DEBUG(dbgSys, "Unreadable character");
+    }
+
+    str[index] = c;
+    bufferSize--;
+    index++;
+  } while (true);
+  return str;
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */
