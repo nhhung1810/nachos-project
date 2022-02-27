@@ -98,6 +98,14 @@ RandomNum:
 	j 	$31
 	.end RandomNum
 
+	.globl BubbleSort
+	.ent	BubbleSort
+BubbleSort:
+	addiu $2,$0,SC_BubbleSort
+	syscall
+	j 	$31
+	.end BubbleSort
+
 	.globl Exit
 	.ent	Exit
 Exit:
