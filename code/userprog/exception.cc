@@ -107,6 +107,16 @@ void ExceptionHandler(ExceptionType which)
 
 			break;
 
+		case SC_ReadNum:
+
+			pcIncrement();
+
+			return;
+
+			ASSERTNOTREACHED()
+
+			break;
+
 		default:
 			cerr << "Unexpected system call " << type << "\n";
 			break;

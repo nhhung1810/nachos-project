@@ -1,0 +1,12 @@
+code/build.linux/*.o
+code/test/*.o 
+code/test/*.coff
+code/test/matmult
+code/test/printNum
+code/test/readNum
+code/test/segments
+code/test/shell
+code/test/sort
+code/build.linux/nachos
+code/test/add
+code/test/halt
