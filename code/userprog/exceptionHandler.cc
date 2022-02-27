@@ -88,6 +88,7 @@ void printCharHandle()
     return;
 }
 
+
 void printStringHandle()
 {
     // Find the head of string
@@ -95,6 +96,15 @@ void printStringHandle()
     char *str = getStringFromAddress(addr);
     SysPrintString(str, strlen(str));
     delete str;
+    pcIncrement();
+}
+
+void readNumHandle() 
+{
+    int n;
+    n = SysReadNum();
+    kernel->machine->WriteRegister(2, n);
+    DEBUG(dbgSys, "Readed number: " << n);
     pcIncrement();
     return;
 }
@@ -120,6 +130,19 @@ char *getStringFromAddress(int addr)
         str[i] = chr;
     }
     return str;
+/**
+ * @brief 
+ * Use standard lib to random positive integer number from 0..MAX_RAND (2^31-1)
+ * 
+ */
+void randomNumHandle()
+{
+    srand(time(NULL));
+    int randomedNumber = rand();
+    kernel->machine->WriteRegister(2, randomedNumber);
+    DEBUG(dbgSys, "Randomed number: " << randomedNumber);
+    pcIncrement();
+    return;
 }
 
 void pcIncrement()

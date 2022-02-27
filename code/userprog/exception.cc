@@ -55,12 +55,7 @@ void ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 			break;
 		case SC_ReadNum:
-			int n;
-			n = SysReadNum();
-			kernel->machine->WriteRegister(2, n);
-			pcIncrement();
-			DEBUG(dbgSys, "Readed number: " << n);
-			pcIncrement();
+			readNumHandle();
 			return;
 			ASSERTNOTREACHED();
 			break;
@@ -72,6 +67,12 @@ void ExceptionHandler(ExceptionType which)
 			break;
 		case SC_PrintString:
 			printStringHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
+
+		case SC_RandomNum:
+			randomNumHandle();
 			return;
 			ASSERTNOTREACHED();
 			break;
