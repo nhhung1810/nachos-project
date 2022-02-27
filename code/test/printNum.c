@@ -2,7 +2,7 @@
 
 int main()
 {
-    PrintNum(10);
+    PrintNum(123);
 
     Halt();
     /* not reached */
