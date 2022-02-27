@@ -10,3 +10,7 @@ code/test/sort
 code/build.linux/nachos
 code/test/add
 code/test/halt
+code/build.linux/Makefile.dep
+code/test/printChar
+code/userprog/exceptionHandler.cc
+code/test/randomNum

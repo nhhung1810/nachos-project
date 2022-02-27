@@ -155,6 +155,12 @@ readNum: readNum.o start.o
 	$(LD) $(LDFLAGS) start.o readNum.o -o readNum.coff
 	$(COFF2NOFF) readNum.coff readNum
 
+readNum.o: randomNum.c
+	$(CC) $(CFLAGS) -c randomNum.c
+readNum: randomNum.o start.o
+	$(LD) $(LDFLAGS) start.o randomNum.o -o randomNum.coff
+	$(COFF2NOFF) randomNum.coff randomNum
+
 shell.o: shell.c
 	$(CC) $(CFLAGS) -c shell.c
 shell: shell.o start.o
