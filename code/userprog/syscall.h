@@ -38,6 +38,7 @@
 #define SC_Add 42
 #define SC_PrintNum 43
 #define SC_ReadNum 44
+#define SC_PrintChar 45
 
 #ifndef IN_ASM
 
@@ -179,6 +180,8 @@ void ThreadExit(int ExitCode);
  * Print out the number
  */
 void PrintNum(int num);
+
+void PrintChar(char c);
 
 #endif /* IN_ASM */
 
