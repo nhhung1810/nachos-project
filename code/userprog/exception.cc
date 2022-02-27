@@ -59,12 +59,24 @@ void ExceptionHandler(ExceptionType which)
 			return;
 			ASSERTNOTREACHED();
 			break;
+		case SC_ReadChar:
+			readCharHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
+
+		case SC_ReadString:
+			readStringHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
 
 		case SC_PrintChar:
 			printCharHandle();
 			return;
 			ASSERTNOTREACHED();
 			break;
+
 		case SC_PrintString:
 			printStringHandle();
 			return;
