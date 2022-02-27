@@ -112,7 +112,8 @@ ifeq ($(hosttype),unknown)
 PROGRAMS = unknownhost
 else
 # change this if you create a new test program!
-PROGRAMS = add halt shell matmult sort segments printNum readNum printChar printString readString readChar ascii
+
+PROGRAMS = add halt shell matmult sort segments printNum readNum printChar printString randomNum bubbleSort readString readChar ascii
 endif
 
 all: $(PROGRAMS)
@@ -154,14 +155,13 @@ printString: printString.o start.o
 	$(LD) $(LDFLAGS) start.o printString.o -o printString.coff
 	$(COFF2NOFF) printString.coff printString
 
+
 ascii.o: ascii.c
 	$(CC) $(CFLAGS) -c ascii.c
 
 ascii: ascii.o start.o
 	$(LD) $(LDFLAGS) start.o ascii.o -o ascii.coff
 	$(COFF2NOFF) ascii.coff ascii
-
-	
 
 readNum.o: readNum.c
 	$(CC) $(CFLAGS) -c readNum.c
@@ -181,11 +181,17 @@ readString: readString.o start.o
 	$(LD) $(LDFLAGS) start.o readString.o -o readString.coff
 	$(COFF2NOFF) readString.coff readString
 
-readNum.o: randomNum.c
+randomNum.o: randomNum.c
 	$(CC) $(CFLAGS) -c randomNum.c
-readNum: randomNum.o start.o
+randomNum: randomNum.o start.o
 	$(LD) $(LDFLAGS) start.o randomNum.o -o randomNum.coff
 	$(COFF2NOFF) randomNum.coff randomNum
+
+bubbleSort.o: bubbleSort.c
+	$(CC) $(CFLAGS) -c bubbleSort.c
+bubbleSort: bubbleSort.o start.o
+	$(LD) $(LDFLAGS) start.o bubbleSort.o -o bubbleSort.coff
+	$(COFF2NOFF) bubbleSort.coff bubbleSort
 
 shell.o: shell.c
 	$(CC) $(CFLAGS) -c shell.c

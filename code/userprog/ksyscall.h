@@ -41,22 +41,19 @@ void SysPrintNum(int num)
     num = -num;
   }
 
-  while (num)
+  // need to load buffer as to not reverse the number
+  int bufferLength = getNumBufferLength(num);
+  int *buffer = (int*)malloc(sizeof(int)*bufferLength);
+  for (int i = 0; i < bufferLength; i++)
   {
-    // need to load buffer as to not reverse the number
-    int bufferLength = getNumBufferLength(num);
-    int *buffer = new int(bufferLength);
-    for (int i = 0; i < bufferLength; i++)
-    {
-      buffer[i] = num % 10;
-      num /= 10;
-    }
-    for (int i = bufferLength - 1; i >= 0; i--)
-    {
-      kernel->synchConsoleOut->PutChar('0' + buffer[i]);
-    }
-    delete buffer;
+    buffer[i] = num % 10;
+    num /= 10;
   }
+  for (int i = bufferLength - 1; i >= 0; i--)
+  {
+    kernel->synchConsoleOut->PutChar('0' + buffer[i]);
+  }
+  free(buffer);
   return;
 }
 
@@ -78,11 +75,11 @@ void SysPrintString(char *str, int length)
 
 int getNumBufferLength(int num)
 {
-  int size = 1;
+  int size = 0;
   int length = 0;
-  while (num / size >= 1.0)
+  while (num)
   {
-    size *= 10;
+    num /= 10;
     length++;
   }
   // DEBUG(dbgSys, "DEBUG->getNumBufferLength->"
@@ -177,7 +174,20 @@ int SysReadNum()
   return isNegative ? -(int)res : (int)res;
 }
 
-// buffer size include
+void SysBubbleSort(int *arr, int n)
+{
+  int i, j, tmp;
+  for (i=0; i<n; ++i) {
+    for (j=0; j<n-1; ++j) {
+      if (arr[j] > arr[j+1]) {
+        tmp = arr[j];
+        arr[j] = arr[j+1];
+        arr[j+1] = tmp;
+      }
+    }
+  }
+}
+
 char *SysReadString(int bufferSize)
 {
   int index = 0;

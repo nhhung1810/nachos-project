@@ -44,6 +44,7 @@
 #define SC_ReadString 48
 #define SC_ReadChar 49
 
+#define SC_BubbleSort 1234
 #define SC_Ascii 6969
 #ifndef IN_ASM
 
