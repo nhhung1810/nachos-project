@@ -10,6 +10,10 @@
 int main()
 {
 
+  int n = ReadNum();
+  
+  PrintNum(n);
+  
   Halt();
   /* not reached */
 }

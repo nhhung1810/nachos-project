@@ -108,9 +108,11 @@ void ExceptionHandler(ExceptionType which)
 			break;
 
 		case SC_ReadNum:
-
+			int n;
+			n = SysReadNum();
+			kernel->machine->WriteRegister(2, n);
 			pcIncrement();
-
+			DEBUG(dbgSys, "Readed number: " << n);
 			return;
 
 			ASSERTNOTREACHED()
