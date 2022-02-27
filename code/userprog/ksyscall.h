@@ -76,8 +76,8 @@ int getNumBufferLength(int num)
     size *= 10;
     length++;
   }
-  DEBUG(dbgSys, "DEBUG->getNumBufferLength->"
-                    << "num=" << num << " length=" << length << "\n");
+  // DEBUG(dbgSys, "DEBUG->getNumBufferLength->"
+  //                   << "num=" << num << " length=" << length << "\n");
   return length;
 }
 
