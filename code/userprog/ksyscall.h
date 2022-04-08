@@ -265,4 +265,28 @@ bool SysCreateFille(char *filename)
   return true;
 }
 
+bool SysRemoveFile(char *filename)
+{
+  if (filename == NULL)
+  {
+    DEBUG(dbgSys, "Null filename? Are you sure?");
+    return false;
+  }
+
+  int size = strlen(filename);
+
+  if (size == 0)
+  {
+    DEBUG(dbgSys, "Empty filename? Are you sure");
+    return false;
+  }
+
+  if (!kernel->fileSystem->Remove(filename))
+  {
+    DEBUG(dbgSys, "Failed to delete file.");
+    return false;
+  }
+  return true;
+}
+
 #endif /* ! __USERPROG_KSYSCALL_H__ */

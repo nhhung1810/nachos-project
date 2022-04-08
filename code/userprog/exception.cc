@@ -45,6 +45,11 @@ void ExceptionHandler(ExceptionType which)
 			return;
 			ASSERTNOTREACHED();
 			break;
+		case SC_Remove:
+			removeFileHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
 		case SC_Halt:
 			haltHandle();
 			return;

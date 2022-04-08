@@ -41,6 +41,7 @@ void printStringHandle();
 void readStringHandle();
 void readCharHandle();
 void createFileHandle();
+void removeFileHandle();
 
 // 2. Helper function
 void pcIncrement();
@@ -234,6 +235,19 @@ void createFileHandle()
 
     // Handle create file
     SysCreateFille(filename);
+    // Clean up
+    delete filename;
+    pcIncrement();
+}
+
+void removeFileHandle()
+{
+    // Read string for filename step
+    int addr = kernel->machine->ReadRegister(4);
+    char *filename = getStringFromAddress(addr);
+
+    // Handle create file
+    SysRemoveFile(filename);
     // Clean up
     delete filename;
     pcIncrement();
