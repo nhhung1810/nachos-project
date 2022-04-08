@@ -5,6 +5,7 @@
  */
 
 #include "syscall.h"
+// typedef int OpenFileId;
 
 int main()
 {
@@ -14,7 +15,9 @@ int main()
   // PrintString(str);
   // PrintString("\n");
   // Create("hung.txt");
-  Open("hung.txt");
+  int id = Open("hung.txt");
+  PrintNum(id);
+
   // PrintNum(id);
   Halt();
   /* not reached */
