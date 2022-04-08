@@ -42,6 +42,7 @@ void readStringHandle();
 void readCharHandle();
 void createFileHandle();
 void removeFileHandle();
+void openFileHandle();
 
 // 2. Helper function
 void pcIncrement();
@@ -249,6 +250,21 @@ void removeFileHandle()
     // Handle create file
     SysRemoveFile(filename);
     // Clean up
+    delete filename;
+    pcIncrement();
+}
+
+void openFileHandle()
+{
+    // Read string for filename step
+    int addr = kernel->machine->ReadRegister(4);
+    char *filename = getStringFromAddress(addr);
+
+    // Handle create file
+    int id = SysOpenFile(filename);
+    // Clean up
+    kernel->machine->WriteRegister(2, id);
+    DEBUG(dbgSys, "Openfileid number: " << id);
     delete filename;
     pcIncrement();
 }
