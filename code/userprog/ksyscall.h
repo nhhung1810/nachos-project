@@ -2,7 +2,7 @@
  *
  * userprog/ksyscall.h
  *
- * Kernel interface for systemcalls 
+ * Kernel interface for systemcalls
  *
  * by Marcus Voelp  (c) Universitaet Karlsruhe
  *
@@ -43,7 +43,7 @@ void SysPrintNum(int num)
 
   // need to load buffer as to not reverse the number
   int bufferLength = getNumBufferLength(num);
-  int *buffer = (int*)malloc(sizeof(int)*bufferLength);
+  int *buffer = (int *)malloc(sizeof(int) * bufferLength);
   for (int i = 0; i < bufferLength; i++)
   {
     buffer[i] = num % 10;
@@ -177,12 +177,15 @@ int SysReadNum()
 void SysBubbleSort(int *arr, int n)
 {
   int i, j, tmp;
-  for (i=0; i<n; ++i) {
-    for (j=0; j<n-1; ++j) {
-      if (arr[j] > arr[j+1]) {
+  for (i = 0; i < n; ++i)
+  {
+    for (j = 0; j < n - 1; ++j)
+    {
+      if (arr[j] > arr[j + 1])
+      {
         tmp = arr[j];
-        arr[j] = arr[j+1];
-        arr[j+1] = tmp;
+        arr[j] = arr[j + 1];
+        arr[j + 1] = tmp;
       }
     }
   }
@@ -211,6 +214,55 @@ char *SysReadString(int bufferSize)
     index++;
   } while (true);
   return str;
+}
+
+// bool SysCreateFile(char* fileName) {
+//     bool success;
+//     int fileNameLength = strlen(fileName);
+
+//     if (fileNameLength == 0) {
+//         DEBUG(dbgSys, "\nFile name can't be empty");
+//         success = false;
+
+//     } else if (fileName == NULL) {
+//         DEBUG(dbgSys, "\nNot enough memory in system");
+//         success = false;
+
+//     } else {
+//         DEBUG(dbgSys, "\nFile's name read successfully");
+//         if (!kernel->fileSystem->Create(fileName)) {
+//             DEBUG(dbgSys, "\nError creating file");
+//             success = false;
+//         } else {
+//             success = true;
+//         }
+//     }
+
+//     return success;
+// }
+
+bool SysCreateFille(char *filename)
+{
+  if (filename == NULL)
+  {
+    DEBUG(dbgSys, "Null filename? Are you sure?");
+    return false;
+  }
+
+  int size = strlen(filename);
+
+  if (size == 0)
+  {
+    DEBUG(dbgSys, "Empty filename? Are you sure");
+    return false;
+  }
+
+  if (!kernel->fileSystem->Create(filename))
+  {
+    DEBUG(dbgSys, "Failed to create file!");
+    return false;
+  }
+  return true;
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */

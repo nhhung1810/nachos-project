@@ -40,6 +40,7 @@ void printCharHandle();
 void printStringHandle();
 void readStringHandle();
 void readCharHandle();
+void createFileHandle();
 
 // 2. Helper function
 void pcIncrement();
@@ -163,8 +164,8 @@ char *getStringFromAddress(int addr)
     return str;
 }
 /**
- * @brief 
- * 
+ * @brief
+ *
  *   Use standard lib to random positive integer number from 0..MAX_RAND(2 ^ 31 - 1) *
  */
 void randomNumHandle()
@@ -177,30 +178,35 @@ void randomNumHandle()
     return;
 }
 
-void bubbleSortHandle() 
+void bubbleSortHandle()
 {
     // DEBUG('z', "CUONG");
     int addr = kernel->machine->ReadRegister(4);
     int n = kernel->machine->ReadRegister(5);
     int i, *arr, j, tmp;
-    arr = (int*)malloc(sizeof(int) * n);
+    arr = (int *)malloc(sizeof(int) * n);
     DEBUG(dbgSys, "Address " << addr);
-    for (i=0; i<n; ++i) {
-        kernel->machine->ReadMem(addr+sizeof(int)*i, sizeof(int), &arr[i]);
+    for (i = 0; i < n; ++i)
+    {
+        kernel->machine->ReadMem(addr + sizeof(int) * i, sizeof(int), &arr[i]);
     }
 
-    for (i=0; i<n; ++i) {
-        for (j=0; j<n-1; ++j) {
-            if (arr[j] > arr[j+1]) {
+    for (i = 0; i < n; ++i)
+    {
+        for (j = 0; j < n - 1; ++j)
+        {
+            if (arr[j] > arr[j + 1])
+            {
                 tmp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = tmp;
+                arr[j] = arr[j + 1];
+                arr[j + 1] = tmp;
             }
         }
     }
 
-    for (i=0; i<n; ++i) {
-        kernel->machine->WriteMem(addr+sizeof(int)*i, sizeof(int), arr[i]);
+    for (i = 0; i < n; ++i)
+    {
+        kernel->machine->WriteMem(addr + sizeof(int) * i, sizeof(int), arr[i]);
     }
 
     pcIncrement();
@@ -218,4 +224,17 @@ void pcIncrement()
     kernel->machine->WriteRegister(
         NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
     return;
+}
+
+void createFileHandle()
+{
+    // Read string for filename step
+    int addr = kernel->machine->ReadRegister(4);
+    char *filename = getStringFromAddress(addr);
+
+    // Handle create file
+    SysCreateFille(filename);
+    // Clean up
+    delete filename;
+    pcIncrement();
 }

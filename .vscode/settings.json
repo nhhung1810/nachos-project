@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "syscall.h": "c",
-        "random": "c"
+        "random": "c",
+        "fstream": "cpp"
     }
 }
