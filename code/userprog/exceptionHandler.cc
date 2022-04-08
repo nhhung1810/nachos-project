@@ -44,6 +44,7 @@ void createFileHandle();
 void removeFileHandle();
 void openFileHandle();
 void closeFileHandle();
+void readFileHandle();
 
 // 2. Helper function
 void pcIncrement();
@@ -274,5 +275,18 @@ void closeFileHandle()
 {
     OpenFileId id = kernel->machine->ReadRegister(4);
     kernel->machine->WriteRegister(2, SysCloseFile(id));
+    pcIncrement();
+}
+void readFileHandle()
+{
+    int strPtr = kernel->machine->ReadRegister(4);
+    int size = (int)kernel->machine->ReadRegister(5);
+
+    OpenFileId id = kernel->machine->ReadRegister(6);
+    char *str = SysReadFile(id);
+    DEBUG(dbgSys, str);
+    if (str == NULL)
+        str = "";
+    systemString2UserString(str, strPtr);
     pcIncrement();
 }

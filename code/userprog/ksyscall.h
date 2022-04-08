@@ -338,4 +338,18 @@ int SysCloseFile(OpenFileId id)
   return 1;
 }
 
+char *SysReadFile(OpenFileId id)
+{
+  if (id > MAX_OPEN_FILE)
+  {
+    DEBUG(dbgSys, "Invalid id");
+    return NULL;
+  }
+  OpenFile *f = kernel->openfiles[id];
+  int len = f->Length();
+  char *str = new char[len + 1];
+  f->Read(str, len);
+  return str;
+}
+
 #endif /* ! __USERPROG_KSYSCALL_H__ */

@@ -39,6 +39,11 @@ void ExceptionHandler(ExceptionType which)
 	case SyscallException:
 		switch (type)
 		{
+		case SC_Read:
+			readFileHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
 		case SC_Close:
 			closeFileHandle();
 			return;
