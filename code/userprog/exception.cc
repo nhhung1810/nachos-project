@@ -39,6 +39,12 @@ void ExceptionHandler(ExceptionType which)
 	case SyscallException:
 		switch (type)
 		{
+		case SC_Create:
+			// add code here
+			createFileHandle();
+			return;
+			ASSERTNOTREACHED();
+			break;
 		case SC_Halt:
 			haltHandle();
 			return;
