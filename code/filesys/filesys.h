@@ -37,13 +37,20 @@
 #include "sysdep.h"
 #include "openfile.h"
 
+#define PROC_COUNT
+
 #ifdef FILESYS_STUB // Temporarily implement file system calls as
 // calls to UNIX, until the real file system
 // implementation is available
 class FileSystem
 {
 public:
-	FileSystem() {}
+	FileSystem()
+	{
+	}
+	~FileSystem()
+	{
+	}
 
 	bool Create(char *name)
 	{

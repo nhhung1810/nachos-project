@@ -10,6 +10,7 @@
 
 #ifndef __USERPROG_KSYSCALL_H__
 #define __USERPROG_KSYSCALL_H__
+#define MAX_OPEN_FILE 10
 
 #include "kernel.h"
 #include "synchconsole.h"
@@ -287,6 +288,33 @@ bool SysRemoveFile(char *filename)
     return false;
   }
   return true;
+}
+
+OpenFileId SysOpenFile(char *filename)
+{
+  if (filename == NULL)
+  {
+    DEBUG(dbgSys, "Null filename? Are you sure?");
+    return false;
+  }
+
+  int size = strlen(filename);
+
+  if (size == 0)
+  {
+    DEBUG(dbgSys, "Empty filename? Are you sure");
+    return false;
+  }
+
+  OpenFile *op = kernel->fileSystem->Open(filename);
+  int index = kernel->nextAvailableOpenFileIndex;
+  if (index > MAX_OPEN_FILE)
+    return -1;
+  kernel->openfiles[index] = op;
+  kernel->nextAvailableOpenFileIndex++;
+  DEBUG(dbgSys, index);
+  DEBUG(dbgSys, kernel->nextAvailableOpenFileIndex);
+  return index;
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */
