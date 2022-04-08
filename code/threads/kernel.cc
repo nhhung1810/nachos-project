@@ -129,7 +129,6 @@ void Kernel::Initialize()
     openfiles = new OpenFile *[MAX_OPEN_FILE];
     for (int i = 0; i < MAX_OPEN_FILE; i++)
         openfiles[i] = NULL;
-    nextAvailableOpenFileIndex = 0;
     interrupt->Enable();
 }
 

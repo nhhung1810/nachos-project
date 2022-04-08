@@ -43,6 +43,7 @@ void readCharHandle();
 void createFileHandle();
 void removeFileHandle();
 void openFileHandle();
+void closeFileHandle();
 
 // 2. Helper function
 void pcIncrement();
@@ -261,10 +262,17 @@ void openFileHandle()
     char *filename = getStringFromAddress(addr);
 
     // Handle create file
-    int id = SysOpenFile(filename);
+    OpenFileId id = SysOpenFile(filename);
     // Clean up
     kernel->machine->WriteRegister(2, id);
     DEBUG(dbgSys, "Openfileid number: " << id);
     delete filename;
+    pcIncrement();
+}
+
+void closeFileHandle()
+{
+    OpenFileId id = kernel->machine->ReadRegister(4);
+    kernel->machine->WriteRegister(2, SysCloseFile(id));
     pcIncrement();
 }

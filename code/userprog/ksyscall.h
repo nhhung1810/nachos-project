@@ -307,14 +307,35 @@ OpenFileId SysOpenFile(char *filename)
   }
 
   OpenFile *op = kernel->fileSystem->Open(filename);
-  int index = kernel->nextAvailableOpenFileIndex;
-  if (index > MAX_OPEN_FILE)
+  int index = MAX_OPEN_FILE;
+  for (int i = 0; i < MAX_OPEN_FILE; i++)
+  {
+    // Scan for the first null pos
+    if (kernel->openfiles[i] == NULL)
+    {
+      index = i;
+      break;
+    }
+  }
+
+  if (index >= MAX_OPEN_FILE)
     return -1;
   kernel->openfiles[index] = op;
-  kernel->nextAvailableOpenFileIndex++;
-  DEBUG(dbgSys, index);
-  DEBUG(dbgSys, kernel->nextAvailableOpenFileIndex);
   return index;
+}
+
+int SysCloseFile(OpenFileId id)
+{
+  if (id > MAX_OPEN_FILE)
+  {
+    DEBUG(dbgSys, "Invalid id");
+    return -1;
+  }
+  OpenFile **openfiles = kernel->openfiles;
+  delete openfiles[id];
+  openfiles[id] = NULL;
+  DEBUG(dbgSys, "Closed file with id" << id);
+  return 1;
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */

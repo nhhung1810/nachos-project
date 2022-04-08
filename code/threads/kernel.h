@@ -60,7 +60,7 @@ public:
 
   int hostName; // machine identifier
   OpenFile **openfiles;
-  int nextAvailableOpenFileIndex;
+  // int nextAvailableOpenFileIndex;
 
 private:
   bool randomSlice;   // enable pseudo-random time slicing
