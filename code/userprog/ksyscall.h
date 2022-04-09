@@ -338,18 +338,30 @@ int SysCloseFile(OpenFileId id)
   return 1;
 }
 
-char *SysReadFile(OpenFileId id)
+char *SysReadFile(int size, OpenFileId id)
 {
+  DEBUG(dbgSys, "Reading " << size << " bytes from file id " << id);
   if (id > MAX_OPEN_FILE)
   {
     DEBUG(dbgSys, "Invalid id");
     return NULL;
   }
   OpenFile *f = kernel->openfiles[id];
-  int len = f->Length();
+  int len = min(size, f->Length());
   char *str = new char[len + 1];
   f->Read(str, len);
   return str;
+}
+
+int SysWriteFile(char* str, int size, OpenFileId id)
+{
+  if (id > MAX_OPEN_FILE || kernel->openfiles[id] == NULL)
+  {
+    DEBUG(dbgSys, "Invalid id " << id);
+    return NULL;
+  }
+  OpenFile *f = kernel->openfiles[id];
+  return f->Write(str, size);
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */
