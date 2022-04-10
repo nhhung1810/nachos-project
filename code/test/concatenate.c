@@ -18,8 +18,15 @@ int main()
   ReadString(secondFileName, 256);
 
   f = Open(firstFileName);
-  g = Open(secondFileName);
+  if (f < 0) {
+    PrintString("Can not open first file\n");
+    Halt();
+  }
 
+  g = Open(secondFileName);
+  if (g < 0) {
+    PrintString("Can not open second file\n");
+  }
   Read(str1, 256, f);
   Read(str2, 256, g);
 
