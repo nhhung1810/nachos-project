@@ -9,7 +9,7 @@
 int main()
 {
   char str[256];
-  ReadString(str, 5);
+  ReadString(str, 256);
   PrintString("\nRead string is: ");
   PrintString(str);
   PrintString("\n");

@@ -214,6 +214,9 @@ char *SysReadString(int bufferSize)
     bufferSize--;
     index++;
   } while (true);
+  if (bufferSize) {
+    str[index++] = '\0';
+  }
   return str;
 }
 

@@ -13,7 +13,7 @@ int main()
   int f;
   PrintString("Enter filename: ");
   
-  ReadString(fileName, 255);
+  ReadString(fileName, 256);
   PrintString(fileName);
   PrintString("\n");
   f = Open(fileName);
