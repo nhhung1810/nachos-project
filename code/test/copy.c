@@ -19,11 +19,21 @@ int main()
 
   PrintString("\n");
   f = Open(sourceFileName);
+  if (f < 0) {
+    PrintString("Can not open source file\n");
+    Halt();
+  }
+
   if (Create(destinationFileName) == 0) {
+    PrintString("Can not create dest file\n");
     Halt();
   }
   g = Open(destinationFileName);
-  
+  if (g < 0) {
+    PrintString("Can not open dest file\n");
+    Halt();
+  }
+
   size = Read(str, 256, f);
   Close(f);
 
