@@ -237,7 +237,8 @@ void createFileHandle()
     char *filename = getStringFromAddress(addr);
 
     // Handle create file
-    SysCreateFille(filename);
+    bool res = SysCreateFille(filename);
+    kernel->machine->WriteRegister(2, res == true ? 1 : 0);
     // Clean up
     delete filename;
     pcIncrement();
@@ -261,7 +262,7 @@ void openFileHandle()
     // Read string for filename step
     int addr = kernel->machine->ReadRegister(4);
     char *filename = getStringFromAddress(addr);
-
+    DEBUG(dbgSys, "File name: " << filename);
     // Handle create file
     OpenFileId id = SysOpenFile(filename);
     // Clean up
@@ -283,10 +284,27 @@ void readFileHandle()
     int size = (int)kernel->machine->ReadRegister(5);
 
     OpenFileId id = kernel->machine->ReadRegister(6);
-    char *str = SysReadFile(id);
+    char *str = SysReadFile(size, id);
     DEBUG(dbgSys, str);
     if (str == NULL)
         str = "";
     systemString2UserString(str, strPtr);
+    kernel->machine->WriteRegister(2, strlen(str));
+    pcIncrement();
+}
+
+void writeFileHandle()
+{
+    int addr = kernel->machine->ReadRegister(4);
+    int size = (int)kernel->machine->ReadRegister(5);
+    OpenFileId id = kernel->machine->ReadRegister(6);
+
+    char *str = getStringFromAddress(addr);
+
+    int writtenBytes = SysWriteFile(str, size, id);
+
+    DEBUG(dbgSys, "Wrote " << writtenBytes << " bytes");
+    kernel->machine->WriteRegister(2, writtenBytes);
+
     pcIncrement();
 }

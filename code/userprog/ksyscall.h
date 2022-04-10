@@ -214,6 +214,9 @@ char *SysReadString(int bufferSize)
     bufferSize--;
     index++;
   } while (true);
+  if (bufferSize) {
+    str[index++] = '\0';
+  }
   return str;
 }
 
@@ -295,7 +298,7 @@ OpenFileId SysOpenFile(char *filename)
   if (filename == NULL)
   {
     DEBUG(dbgSys, "Null filename? Are you sure?");
-    return false;
+    return -1;
   }
 
   int size = strlen(filename);
@@ -303,10 +306,16 @@ OpenFileId SysOpenFile(char *filename)
   if (size == 0)
   {
     DEBUG(dbgSys, "Empty filename? Are you sure");
-    return false;
+    return -1;
   }
 
   OpenFile *op = kernel->fileSystem->Open(filename);
+
+  if (op == NULL) {
+    DEBUG(dbgSys, "file does not found");
+    return -1;
+  }
+  
   int index = MAX_OPEN_FILE;
   for (int i = 0; i < MAX_OPEN_FILE; i++)
   {
@@ -338,18 +347,32 @@ int SysCloseFile(OpenFileId id)
   return 1;
 }
 
-char *SysReadFile(OpenFileId id)
+char *SysReadFile(int size, OpenFileId id)
 {
+  DEBUG(dbgSys, "Reading " << size << " bytes from file id " << id);
   if (id > MAX_OPEN_FILE)
   {
     DEBUG(dbgSys, "Invalid id");
     return NULL;
   }
   OpenFile *f = kernel->openfiles[id];
-  int len = f->Length();
+  int len = min(size, f->Length() - f->getSeekPosition());
   char *str = new char[len + 1];
-  f->Read(str, len);
+  int n = f->Read(str, len);
+  DEBUG(dbgSys, "Readed " << n << " bytes");
+  str[len] = '\0';
   return str;
+}
+
+int SysWriteFile(char* str, int size, OpenFileId id)
+{
+  if (id > MAX_OPEN_FILE || kernel->openfiles[id] == NULL)
+  {
+    DEBUG(dbgSys, "Invalid id " << id);
+    return NULL;
+  }
+  OpenFile *f = kernel->openfiles[id];
+  return f->Write(str, size);
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */

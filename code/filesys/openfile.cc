@@ -193,4 +193,9 @@ OpenFile::Length()
     return hdr->FileLength(); 
 }
 
+int
+OpenFile::getSeekPosition() {
+    return this->seekPosition;
+}
+
 #endif //FILESYS_STUB
