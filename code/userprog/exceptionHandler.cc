@@ -262,7 +262,7 @@ void openFileHandle()
     // Read string for filename step
     int addr = kernel->machine->ReadRegister(4);
     char *filename = getStringFromAddress(addr);
-
+    DEBUG(dbgSys, "File name: " << filename);
     // Handle create file
     OpenFileId id = SysOpenFile(filename);
     // Clean up

@@ -298,7 +298,7 @@ OpenFileId SysOpenFile(char *filename)
   if (filename == NULL)
   {
     DEBUG(dbgSys, "Null filename? Are you sure?");
-    return false;
+    return -1;
   }
 
   int size = strlen(filename);
@@ -306,10 +306,16 @@ OpenFileId SysOpenFile(char *filename)
   if (size == 0)
   {
     DEBUG(dbgSys, "Empty filename? Are you sure");
-    return false;
+    return -1;
   }
 
   OpenFile *op = kernel->fileSystem->Open(filename);
+
+  if (op == NULL) {
+    DEBUG(dbgSys, "file does not found");
+    return -1;
+  }
+  
   int index = MAX_OPEN_FILE;
   for (int i = 0; i < MAX_OPEN_FILE; i++)
   {
@@ -352,7 +358,9 @@ char *SysReadFile(int size, OpenFileId id)
   OpenFile *f = kernel->openfiles[id];
   int len = min(size, f->Length());
   char *str = new char[len + 1];
-  f->Read(str, len);
+  int n = f->Read(str, len);
+  DEBUG(dbgSys, "Readed " << n << " bytes");
+  str[len] = '\0';
   return str;
 }
 
