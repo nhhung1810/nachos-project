@@ -14,9 +14,12 @@ int main()
   PrintString("Enter filename: ");
   
   ReadString(fileName, 256);
-  PrintString(fileName);
-  PrintString("\n");
+
   f = Open(fileName);
+
+  if (f < 0) {
+    Halt();
+  }
   
   Read(str, 256, f);
   Close(f);
