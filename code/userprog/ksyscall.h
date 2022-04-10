@@ -356,7 +356,7 @@ char *SysReadFile(int size, OpenFileId id)
     return NULL;
   }
   OpenFile *f = kernel->openfiles[id];
-  int len = min(size, f->Length());
+  int len = min(size, f->Length() - f->getSeekPosition());
   char *str = new char[len + 1];
   int n = f->Read(str, len);
   DEBUG(dbgSys, "Readed " << n << " bytes");

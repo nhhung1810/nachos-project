@@ -27,11 +27,14 @@ int main()
   if (g < 0) {
     PrintString("Can not open second file\n");
   }
-  Read(str1, 256, f);
   Read(str2, 256, g);
 
-  PrintString(str1);
-  PrintString(str2);
+  while (1) {
+    size = Read(str2, 255, f);
+    if (size == 0) 
+      break;
+      Write(str2, size, f);
+  }
   
   Close(f);
   Close(g);

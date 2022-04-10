@@ -67,6 +67,11 @@ public:
 		return Tell(file);
 	}
 
+	int getSeekPosition()
+	{
+		return this->currentOffset;
+	}
+
 private:
 	int file;
 	int currentOffset;
@@ -100,6 +105,8 @@ public:
 				  // file (this interface is simpler
 				  // than the UNIX idiom -- lseek to
 				  // end of file, tell, lseek back
+
+	int getSeekPosition();
 
 private:
 	FileHeader *hdr;  // Header for this file

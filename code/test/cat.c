@@ -10,7 +10,7 @@ char fileName[256], str[256];
 
 int main()
 {
-  int f;
+  int f, size;
   PrintString("Enter filename: ");
   
   ReadString(fileName, 256);
@@ -21,9 +21,15 @@ int main()
     Halt();
   }
   
-  Read(str, 256, f);
+  while (1) {
+    size = Read(str, 255, f);
+    if (size == 0) 
+      break;
+    PrintString(str);
+  }
+  // Read(str, 2, f);
   Close(f);
-  PrintString(str);
+  
   PrintString("\n");
   Halt();
   /* not reached */

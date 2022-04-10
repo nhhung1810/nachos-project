@@ -34,10 +34,13 @@ int main()
     Halt();
   }
 
-  size = Read(str, 256, f);
+  while (1) {
+    size = Read(str, 255, f);
+    if (size == 0) 
+      break;
+      Write(str, size, g);
+  }
   Close(f);
-
-  Write(str, size, g);
   Close(g);
 
   Halt();

@@ -43,3 +43,5 @@ coff2noff/coff2noff.x86Linux
 code/test/cat
 code/test/copy
 code/test/delete
+code/test/concatenate.c
+code/test/concatenate
